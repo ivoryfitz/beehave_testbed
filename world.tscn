@@ -1,0 +1,167 @@
+[gd_scene load_steps=21 format=3 uid="uid://da1dml6guejx3"]
+
+[ext_resource type="Script" path="res://addons/beehave/nodes/beehave_tree.gd" id="1_55i5o"]
+[ext_resource type="Script" path="res://CharacterBody2D.gd" id="1_n5jq4"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/selector_reactive.gd" id="3_hokjl"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence.gd" id="3_wq7yn"]
+[ext_resource type="Script" path="res://WasClicked.gd" id="3_xiynl"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/decorators/failer.gd" id="5_34r1s"]
+[ext_resource type="Script" path="res://FleeAttacker.gd" id="6_v128j"]
+[ext_resource type="Script" path="res://Wander.gd" id="6_vd0hj"]
+[ext_resource type="Script" path="res://CheckAggroRadius.gd" id="8_xqfyo"]
+[ext_resource type="Script" path="res://ShouldLeash.gd" id="9_2334d"]
+[ext_resource type="Script" path="res://GetInRange.gd" id="9_ve4ax"]
+[ext_resource type="Script" path="res://DoLeash.gd" id="10_gwiff"]
+[ext_resource type="Script" path="res://Attack.gd" id="10_j31hp"]
+[ext_resource type="Script" path="res://IsInAttackRange.gd" id="11_2co7h"]
+[ext_resource type="Script" path="res://MouseFollower.gd" id="11_ysty4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2yvpv"]
+size = Vector2(38, 38)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cjku8"]
+radius = 200.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gaig3"]
+size = Vector2(1268, 61)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_er6dn"]
+size = Vector2(52, 752)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7m1db"]
+size = Vector2(50, 42)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(954, 465)
+input_pickable = true
+script = ExtResource("1_n5jq4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_2yvpv")
+
+[node name="Flee (Disabled)" type="Node" parent="CharacterBody2D"]
+script = ExtResource("3_wq7yn")
+
+[node name="Disable Subtree Action (For testing)" type="Node" parent="CharacterBody2D/Flee (Disabled)"]
+script = ExtResource("5_34r1s")
+
+[node name="CheckIfAttacked" type="Node" parent="CharacterBody2D/Flee (Disabled)/Disable Subtree Action (For testing)"]
+script = ExtResource("3_xiynl")
+
+[node name="FleeAttacker" type="Node" parent="CharacterBody2D/Flee (Disabled)"]
+script = ExtResource("6_v128j")
+
+[node name="Timer" type="Timer" parent="CharacterBody2D/Flee (Disabled)/FleeAttacker"]
+wait_time = 1.5
+one_shot = true
+
+[node name="BeehaveRoot" type="Node" parent="CharacterBody2D"]
+script = ExtResource("1_55i5o")
+actor_node_path = NodePath("..")
+
+[node name="ChooseAction" type="Node" parent="CharacterBody2D/BeehaveRoot"]
+script = ExtResource("3_hokjl")
+
+[node name="Aggro" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction"]
+script = ExtResource("3_wq7yn")
+
+[node name="CheckAggroRadius" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro" node_paths=PackedStringArray("aggro_radius")]
+script = ExtResource("8_xqfyo")
+aggro_radius = NodePath("../../../../AggroRadius")
+
+[node name="Pursuit" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro"]
+script = ExtResource("3_hokjl")
+
+[node name="Leash" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit"]
+script = ExtResource("3_wq7yn")
+
+[node name="ShouldLeash" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit/Leash"]
+script = ExtResource("9_2334d")
+
+[node name="DoLeash" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit/Leash"]
+script = ExtResource("10_gwiff")
+
+[node name="Attack" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit"]
+script = ExtResource("3_wq7yn")
+
+[node name="IsInAttackRange" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit/Attack"]
+script = ExtResource("11_2co7h")
+
+[node name="Attack" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit/Attack"]
+script = ExtResource("10_j31hp")
+
+[node name="Pursue" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit"]
+script = ExtResource("9_ve4ax")
+
+[node name="Wander" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction"]
+script = ExtResource("6_vd0hj")
+
+[node name="Rays" type="Node2D" parent="CharacterBody2D"]
+
+[node name="RayCast2D" type="RayCast2D" parent="CharacterBody2D/Rays"]
+exclude_parent = false
+target_position = Vector2(45, 0)
+
+[node name="RayCast2D2" type="RayCast2D" parent="CharacterBody2D/Rays"]
+rotation = 0.785398
+exclude_parent = false
+target_position = Vector2(45, 0)
+collide_with_areas = true
+
+[node name="RayCast2D5" type="RayCast2D" parent="CharacterBody2D/Rays"]
+rotation = 1.309
+exclude_parent = false
+target_position = Vector2(45, 0)
+collide_with_areas = true
+
+[node name="RayCast2D3" type="RayCast2D" parent="CharacterBody2D/Rays"]
+rotation = -0.785398
+target_position = Vector2(45, 0)
+
+[node name="RayCast2D4" type="RayCast2D" parent="CharacterBody2D/Rays"]
+rotation = -1.309
+target_position = Vector2(45, 0)
+
+[node name="AggroRadius" type="Area2D" parent="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/AggroRadius"]
+shape = SubResource("CircleShape2D_cjku8")
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(598, -20)
+shape = SubResource("RectangleShape2D_gaig3")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Walls"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D3"]
+position = Vector2(-8, 324)
+shape = SubResource("RectangleShape2D_er6dn")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Walls"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D4"]
+position = Vector2(1157, 324)
+shape = SubResource("RectangleShape2D_er6dn")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Walls"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D2"]
+position = Vector2(575, 663)
+shape = SubResource("RectangleShape2D_gaig3")
+
+[node name="MouseFollower" type="StaticBody2D" parent="."]
+position = Vector2(206, 102)
+collision_layer = 3
+collision_mask = 0
+script = ExtResource("11_ysty4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseFollower"]
+shape = SubResource("RectangleShape2D_7m1db")

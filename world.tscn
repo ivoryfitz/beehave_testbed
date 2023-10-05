@@ -14,7 +14,8 @@
 [ext_resource type="Script" path="res://DoLeash.gd" id="10_gwiff"]
 [ext_resource type="Script" path="res://Attack.gd" id="10_j31hp"]
 [ext_resource type="Script" path="res://IsInAttackRange.gd" id="11_2co7h"]
-[ext_resource type="Script" path="res://MouseFollower.gd" id="11_ysty4"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence_reactive.gd" id="11_jtsjh"]
+[ext_resource type="PackedScene" uid="uid://c4ewq2hcyb3hi" path="res://mouse_follower.tscn" id="16_0yvk8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2yvpv"]
 size = Vector2(38, 38)
@@ -28,13 +29,10 @@ size = Vector2(1268, 61)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_er6dn"]
 size = Vector2(52, 752)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7m1db"]
-size = Vector2(50, 42)
-
 [node name="Node2D" type="Node2D"]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
-position = Vector2(954, 465)
+position = Vector2(704, 357)
 input_pickable = true
 script = ExtResource("1_n5jq4")
 
@@ -84,7 +82,7 @@ script = ExtResource("9_2334d")
 script = ExtResource("10_gwiff")
 
 [node name="Attack" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit"]
-script = ExtResource("3_wq7yn")
+script = ExtResource("11_jtsjh")
 
 [node name="IsInAttackRange" type="Node" parent="CharacterBody2D/BeehaveRoot/ChooseAction/Aggro/Pursuit/Attack"]
 script = ExtResource("11_2co7h")
@@ -157,11 +155,4 @@ shape = SubResource("RectangleShape2D_er6dn")
 position = Vector2(575, 663)
 shape = SubResource("RectangleShape2D_gaig3")
 
-[node name="MouseFollower" type="StaticBody2D" parent="."]
-position = Vector2(206, 102)
-collision_layer = 3
-collision_mask = 0
-script = ExtResource("11_ysty4")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseFollower"]
-shape = SubResource("RectangleShape2D_7m1db")
+[node name="MouseFollower" parent="." instance=ExtResource("16_0yvk8")]

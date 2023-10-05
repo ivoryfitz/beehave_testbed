@@ -5,6 +5,7 @@ var target_reached := false
 
 func tick(actor: Node, blackboard: Blackboard):
 	if not actor.target_reached.is_connected(_target_reached):
+		print("Leashing")
 		actor.target_reached.connect(_target_reached)
 	var target_location: Vector2 = blackboard.get_value("leash_position")
 	actor.target_location = target_location

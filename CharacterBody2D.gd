@@ -42,4 +42,4 @@ func _on_body_entered(_body: Node2D):
 	print("player entered")
 
 func default_distance_tester() -> bool:
-	return global_position.distance_to(target_location) <= max_speed
+	return global_position.distance_to(target_location) <= 5

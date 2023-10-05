@@ -16,7 +16,6 @@ func tick(actor: Node, blackboard: Blackboard):
 		actor.target_reached.disconnect(_target_reached)
 		actor.target_location = actor.global_position
 		return SUCCESS
-	print("Pursuing...")
 	return RUNNING
 
 func interrupt(actor: Node, _blackboard: Blackboard) -> void:
@@ -25,7 +24,6 @@ func interrupt(actor: Node, _blackboard: Blackboard) -> void:
 	actor.target_reached.disconnect(_target_reached)
 
 func _target_reached():
-	print("Oh shit I'm still connected...-Pursuit")
 	target_reached = true
 
 func make_distance_threshold_tester(pos1: Vector2, pos2: Vector2, threshold: float) -> Callable:

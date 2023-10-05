@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://byewmvnjr20n"]
+
+[ext_resource type="Script" path="res://telegraph_testing.gd" id="1_l7kte"]
+[ext_resource type="PackedScene" uid="uid://c4ewq2hcyb3hi" path="res://mouse_follower.tscn" id="2_y2gjt"]
+
+[node name="Root" type="Node2D"]
+
+[node name="Telegraph" type="Node2D" parent="."]
+script = ExtResource("1_l7kte")
+
+[node name="FillTimer" type="Timer" parent="Telegraph"]
+wait_time = 2.0
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="Telegraph"]
+wait_time = 2.0
+one_shot = true
+
+[node name="Hitbox" type="Area2D" parent="Telegraph"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Telegraph/Hitbox"]
+
+[node name="MouseFollower" parent="." instance=ExtResource("2_y2gjt")]

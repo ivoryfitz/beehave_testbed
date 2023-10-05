@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4ewq2hcyb3hi"]
+
+[ext_resource type="Script" path="res://MouseFollower.gd" id="1_b6nd2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7m1db"]
+size = Vector2(50, 42)
+
+[node name="MouseFollower" type="StaticBody2D"]
+position = Vector2(206, 102)
+collision_layer = 3
+collision_mask = 0
+script = ExtResource("1_b6nd2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7m1db")
